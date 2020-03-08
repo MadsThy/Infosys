@@ -320,6 +320,7 @@ class Routes
         $this->routes['opret_hold']                = array('url' => 'hold/new/', 'controller' => 'Groups', 'method' => 'createGroup');
         $this->routes['edit_hold']                 = array('url' => 'hold/edit/:id:', 'controller' => 'Groups', 'method' => 'edit');
         $this->routes['delete_hold']               = array('url' => 'hold/slet/:id:', 'controller' => 'Groups', 'method' => 'deleteGroup');
+        $this->routes['ajax_aflys_hold']           = array('url' => 'hold/ajaxcancelgroup/:id:/:status:', 'controller' => 'Groups', 'method' => 'ajaxCancelGroup');
         $this->routes['ajax_delete_hold']          = array('url' => 'hold/ajaxdeletegroup/:id:', 'controller' => 'Groups', 'method' => 'ajaxDeleteGroup');
         $this->routes['ajax_create_group']         = array('url' => 'hold/ajaxcreategroup/:afvikling_id:', 'controller' => 'Groups', 'method' => 'ajaxCreateGroup');
         $this->routes['ajax_schedule_participant'] = array('url' => 'groups/scheduleparticipant', 'controller' => 'Groups', 'method' => 'ajaxScheduleParticipant');

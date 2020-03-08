@@ -2347,3 +2347,7 @@ form#frmExcelExport select {
 .deltager-search-box-inner input[type=checkbox] {
     margin: 0px;
 }
+
+#deltager_showall .cancelled td:nth-child(-n + 8) {
+    opacity: 0.5;
+}

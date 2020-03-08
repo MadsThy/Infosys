@@ -155,6 +155,16 @@ class GroupsModel extends Model
         }
     }
 
+    public function cancelHold($hold, $cancelled = 'true')
+    {
+        if (!is_object($hold) || !$hold->isLoaded()) {
+            return false;
+        }
+
+        $hold->cancelled = strtolower($cancelled) === 'true' ? 1 : 0;
+        return $hold->update();
+    }
+
 
     /**
      * returns all activities

@@ -327,6 +327,34 @@ class GroupsController extends Controller
         echo json_encode(array('status' => "fail"));
         exit;
     }
-    //}}}
 
+    public function ajaxCancelGroup() {
+        $user = $this->model->getLoggedInUser();
+        if (!($user->hasRole('Activity-admin') || $user->hasRole('Infonaut') || $user->hasRole('admin'))) {
+            header('HTTP/1.1 403 Fail');
+            echo json_encode(array('status' => 'fail', 'reason' => 'No access'));
+            exit;
+        }
+
+        if (!empty($this->vars['id']) && ($hold = $this->model->findEntity('Hold', $this->vars['id']))) {
+
+            if ($this->model->cancelHold($hold, $this->vars['status'])) {
+
+                $this->log("Hold #{$this->vars['id']} blev aflyst af {$this->model->getLoggedInUser()->user}", 'Hold', $this->model->getLoggedInUser());
+
+                header('HTTP/1.1 200 Done');
+                header('Content-Type: application/json');
+                echo json_encode(array('status' => 'work', 'id' => $this->vars['id'], 'cancelled' => $hold->cancelled ? 'true' : 'false'));
+                exit;
+            }
+        }
+
+        header('HTTP/1.1 500 Fail');
+        header('Content-Type: application/json');
+        echo json_encode(array('status' => "fail"));
+        exit;
+
+
+    }
+    //}}}
 }
