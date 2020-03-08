@@ -210,6 +210,7 @@ FROM
     JOIN lokaler ON lokaler.id = hold.lokale_id
     JOIN afviklinger ON afviklinger.id = temp.id
     JOIN aktiviteter ON aktiviteter.id = afviklinger.aktivitet_id
+    WHERE NOT hold.cancelled
 ORDER BY temp.start;", array($date, $date)))
             {
                 foreach ($result as $row)
