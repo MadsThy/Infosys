@@ -46,7 +46,7 @@ class ParticipantController extends Controller
      * @var array
      */
     protected $prerun_hooks = array(
-        array('method' => 'checkUser','exclusive' => true, 'methodlist' => array('displayParticipantInfo', 'showSignupDetails', 'showSignupDetailsJson', 'listAssignedGMs', 'ean8SmallBarcode', 'ean8Barcode', 'ean8Badge', 'processPayment', 'registerPayment', 'showPaymentDone', 'resetParticipantPassword', 'sendFirstPaymentReminder', 'sendSecondPaymentReminder', 'sendLastPaymentReminder', 'cancelParticipantSignup')),
+        array('method' => 'checkUser','exclusive' => true, 'methodlist' => array('displayParticipantInfo', 'showSignupDetails', 'showSignupDetailsJson', 'listAssignedGMs', 'ean8SmallBarcode', 'ean8Barcode', 'ean8Badge', 'processPayment', 'registerPayment', 'showPaymentDone', 'resetParticipantPassword', 'sendFirstPaymentReminder', 'sendSecondPaymentReminder', 'sendLastPaymentReminder', 'cancelParticipantSignup','cancelFastaval')),
     );
 
     /**
@@ -1783,6 +1783,25 @@ die('Not sending last payment reminders');
         return $mail->send();
     }
 
+    private function sendCancellation($participant){
+        $danish = $participant->speaksDanish();
+        $title = $danish ?
+            "[TESTING] Fastaval ".date('Y')." aflyst":
+            "[TESTING] Fastaval ".date('Y')." cancelled";
+        
+        $this->page->danish = $danish;
+        $this->page->setTemplate('participant/sendcancelledmail');
+
+        $mail = new Mail($this->config);
+
+        $mail->setFrom($this->config->get('app.email_address'), $this->config->get('app.email_alias'))
+            ->setRecipient($participant->email)
+            ->setSubject($title)
+            ->setBodyFromPage($this->page);
+
+        return $mail->send();
+    }
+
     public function registerBankTransfer()
     {
         if (!$this->page->request->isPost()) {
@@ -1824,6 +1843,20 @@ exit;
         }
 
         $this->log('Annulment check done. Sent emails to ' . $count . ' participants', 'Payment', null);
+
+        exit;
+    }
+
+    public function cancelFastaval(){
+die('Not sending cancel mails');
+        $participants = $this->model->factory('Participant')->findAll();
+        $count = 0;
+        foreach ($participants as $participant) {
+            $this->sendCancellation($participant);
+            $this->log('System sent cancellation mail to participant (ID: ' . $participant->id . ')', 'Cancellation', null);
+            $count++;
+        }
+        $this->log('Cancellation mail sent to ' . $count . ' participants', 'Cancellation', null);
 
         exit;
     }

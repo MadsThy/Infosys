@@ -180,6 +180,7 @@ class Routes
         $this->routes['13-day_payment_reminder']                    = array('url' => 'participant/payment-reminder/second', 'controller' => 'Participant', 'method' => 'sendSecondPaymentReminder');
         $this->routes['last_payment_reminder']                      = array('url' => 'participant/payment-reminder/last', 'controller' => 'Participant', 'method' => 'sendLastPaymentReminder');
         $this->routes['payment_reminder_annulled']                  = array('url' => 'participant/payment-reminder/annulled', 'controller' => 'Participant', 'method' => 'cancelParticipantSignup');
+        $this->routes['send_cancelled_mail']                        = array('url' => 'participant/sendmail/cancelled', 'controller' => 'Participant', 'method' => 'cancelFastaval');
 
         // bank transfer
         $this->routes['participant_register_bank_payment']          = array('url' => 'participant/register-bank-transfer/:id:', 'controller' => 'Participant', 'method' => 'registerBankTransfer');
