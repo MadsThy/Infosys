@@ -1786,8 +1786,8 @@ die('Not sending last payment reminders');
     private function sendCancellation($participant){
         $danish = $participant->speaksDanish();
         $title = $danish ?
-            "[TESTING] Fastaval ".date('Y')." aflyst":
-            "[TESTING] Fastaval ".date('Y')." cancelled";
+            "Fastaval ".date('Y')." aflyst":
+            "Fastaval ".date('Y')." cancelled";
         
         $this->page->danish = $danish;
         $this->page->setTemplate('participant/sendcancelledmail');
