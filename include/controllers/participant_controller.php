@@ -129,6 +129,12 @@ class ParticipantController extends Controller
 
             $this->page->id_template_select_data = $this->model->fetchTemplateSelectData($this->page->default_template);
 
+            // did the participant order Mulm
+            $this->page->mulm = false;
+            foreach ($this->page->deltager_info['wear'] as $wear) {
+                if ($wear->getWear()->id == 38) $this->page->mulm = true;
+            }
+
             if ($this->page->deltager->getAge(new DateTime($this->config->get('con.start'))) < 18) {
                 $this->page->includeCSS('youngster.css');
             }

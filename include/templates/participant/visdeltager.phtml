@@ -27,6 +27,64 @@ $this->registerLateLoadJS('participant.js');
 
     <form action="<?= $this->url('visdeltager', array('id' => $this->deltager->id));?>" method="get"><button type="submit"><?= ($this->payment_edit ? 'Normal mode' : 'Betalings mode');?></button><?php if (!$this->payment_edit) :?><input type="hidden" name="payment_edit" value="true"/><?php endif; ?></form>
 </div>
+<div id='headboxes' class="middleboxes">
+    <div id='refund_info'>
+        <fieldset>
+            <legend>Tilbagebetalingsinfo</legend>
+            <table>
+                <tr>
+                    <td class='label'>Registrering: </td>
+                    <td class='editable text' id='refund_reg'><?= $this->deltager->refund_reg;?></td>
+                </tr>
+                <tr>
+                    <td class='label'>Kontonummer: </td>
+                    <td class='editable text' id='refund_account' colspan='3'><?= $this->deltager->refund_account;?></td>
+                </tr>
+                <tr>
+                    <td class='label'>Forbliv i Alea: </td>
+                    <td class='editable yesno' id='refund_stay_alea'><?= $this->deltager->refund_stay_alea;?></td>
+                </tr>
+                <tr>
+                    <td class='label'>Udført: </td>
+                    <td class='editable yesno' id='refund_completed'><?= $this->deltager->refund_completed;?></td>
+                </tr>
+            </table>
+        </fieldset>
+    </div>
+    <div id='refund_numbers'>
+        <fieldset>
+            <legend>Tilbagebetaling regnskab</legend>
+            <table cellpadding='0' cellspacing='0'>
+                <tr>
+                    <td>Forudbetalt</td>
+                    <td style='text-align: right;'><?=$this->deltager->betalt_beloeb?>,-</td>
+                </tr>
+<?php 
+                $this->refund = $this->deltager->betalt_beloeb;
+                if ($this->deltager->refund_stay_alea === 'ja') {
+                    $this->refund -= 75;
+?>
+                <tr>
+                    <td>Alea</td>
+                    <td style='text-align: right;'>-75,-</td>
+                </tr>
+<?php           }
+                if ($this->mulm) {
+                    $this->refund -= 199;
+?>
+                <tr>
+                    <td>Mulm af Alex Uth</td>
+                    <td style='text-align: right;'>-199,-</td>
+                </tr>
+                <?php }?>
+                <tr>
+                    <td >Refusion ialt</td>
+                    <td style='text-align: right;border-bottom: 1px solid #000000;border-top: 1px solid #000000'><?= $this->refund?>,-</td>
+                </tr>
+            </table>
+        </fieldset>
+    </div>
+</div>
 <div id='topboxes'>
     <div id='personal_info'>
         <fieldset>
