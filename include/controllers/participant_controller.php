@@ -46,7 +46,26 @@ class ParticipantController extends Controller
      * @var array
      */
     protected $prerun_hooks = array(
-        array('method' => 'checkUser','exclusive' => true, 'methodlist' => array('displayParticipantInfo', 'showSignupDetails', 'showSignupDetailsJson', 'listAssignedGMs', 'ean8SmallBarcode', 'ean8Barcode', 'ean8Badge', 'processPayment', 'registerPayment', 'showPaymentDone', 'resetParticipantPassword', 'sendFirstPaymentReminder', 'sendSecondPaymentReminder', 'sendLastPaymentReminder', 'cancelParticipantSignup','cancelFastaval')),
+        array('method' => 'checkUser','exclusive' => true, 'methodlist' => array(
+            'displayParticipantInfo',
+            'showSignupDetails',
+            'showSignupDetailsJson',
+            'listAssignedGMs',
+            'ean8SmallBarcode',
+            'ean8Barcode',
+            'ean8Badge',
+            'processPayment',
+            'registerPayment',
+            'showPaymentDone',
+            'resetParticipantPassword',
+            'sendFirstPaymentReminder',
+            'sendSecondPaymentReminder',
+            'sendLastPaymentReminder',
+            'cancelParticipantSignup',
+            'cancelFastaval',
+            'sendRefundMails',
+            'processRefund'
+        ))
     );
 
     /**
@@ -1859,6 +1878,88 @@ die('Not sending cancel mails');
         $this->log('Cancellation mail sent to ' . $count . ' participants', 'Cancellation', null);
 
         exit;
+    }
+
+    public function sendRefundMails(){
+//die('Not sending refund mails');
+        $participants = $this->model->factory('Participant')->findAll();
+        $count = 0;
+        foreach ($participants as $participant) {
+            if ($participant->refund_hash !== null){
+                //Already have a hash meaning mail has already been sent
+                continue;
+            }
+
+            $participant->refund_hash = makeRandomString(32);
+            $participant->update();
+            
+            $danish = $participant->speaksDanish();
+            $title = $danish ?
+                "Fastaval ".date('Y')." tilbagebetaling":
+                "Fastaval ".date('Y')." refund";
+            
+            $this->page->danish = $danish;
+            $this->page->refund_url = $this->url('participant_refund', array('hash' => $participant->refund_hash));
+            $this->page->setTemplate('participant/sendrefundmail');
+    
+            $mail = new Mail($this->config);
+    
+            $mail->setFrom($this->config->get('app.email_address'), $this->config->get('app.email_alias'))
+                ->setRecipient($participant->email)
+                ->setSubject($title)
+                ->setBodyFromPage($this->page);
+    
+            $mail->send();
+    
+            $this->log('System sent refund mail to participant (ID: ' . $participant->id . ')', 'Refund', null);
+            $count++;
+        }
+        $this->log('Refund mail sent to ' . $count . ' participants', 'Refund', null);
+
+        exit;
+    }
+
+    public function processRefund(){
+        $this->page->layout_template = 'contentonly.phtml';
+        if (empty($this->vars['hash']) || !$participant = $this->model->getParticipantFromRefundHash($this->vars['hash'])){
+            $this->page->message = "no_hash";
+            return;
+        }
+
+        $this->page->participant = $participant;
+
+        if ($participant->refund_account !== null){
+            // Already registered account
+            $this->page->message = "registered";
+            return;
+        }
+
+        if ($this->page->request->isPost()){
+            $post = $this->page->request->post;
+
+            if($post->code !== $participant->password){
+                $this->page->message = "fail_pass";
+                return;
+            }
+
+            if (empty($post->reg)) {
+                $this->page->message = "empty_reg";
+                return;
+            }
+
+            if (empty($post->account)) {
+                $this->page->message = "empty_acc";
+                return;
+            }
+
+            $participant->refund_reg = $post->reg;
+            $participant->refund_account = $post->account;
+            $participant->refund_stay_alea = $post->alea === "on" ? "ja" : "nej";
+            $participant->update();
+
+            $this->page->message = "success";
+        }
+
     }
 
     /**

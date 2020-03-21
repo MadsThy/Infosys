@@ -3073,4 +3073,10 @@ WHERE (
         return $refundees;
     }
 
+    public function getParticipantFromRefundHash($hash){
+        $participant = $this->createEntity('Deltagere');
+        $select = $participant->getSelect()->setWhere('refund_hash','=', $hash);
+        return $participant->findBySelect($select);
+    }
+
 }

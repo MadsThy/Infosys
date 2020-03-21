@@ -1,0 +1,97 @@
+<?php if ($this->message) {
+  $halt = true;
+
+  switch ($this->message){
+    case "no_hash":
+      $dk = "Dette link er ikke gyldigt";
+      $en = "This link is not valid";
+      break;
+    case "registered":
+      $dk = "Du har allerede registreret dine oplysninger";
+      $en = "You've already registered your information";
+      break;
+    case "fail_pass":
+      $dk = "Koden er ikke korrekt";
+      $en = "The code isn't correct";
+      $halt = false;
+      break;
+    case "success":
+      $dk = "Dine oplysninger er nu gemt";
+      $en = "Your information has been saved";
+      break;
+    case "empty_reg":
+      $dk = "Registreringsnummer må ikke være tomt";
+      $en = "Registration number cannot be empty";
+      $halt = false;
+      break;
+    case "empty_acc":
+      $dk = "Kontonummer må ikke være tomt";
+      $en = "Account number cannot be empty";
+      $halt = false;
+      break;
+    default:
+      $dk = "Ukendt fejl";
+      $en = "Unknow error";
+  }
+} 
+
+if(!$this->participant || $this->participant->speaksDanish()) { 
+  ?>
+    <h2>Fastaval 2020 Tilbagebetaling</h2>
+    <p><?=$dk?></p>
+  <?php
+}
+
+if(!$this->participant || !$this->participant->speaksDanish()) { 
+  ?>
+    <h2>Fastaval 2020 Refund</h2>
+    <p><?=$en?></p>
+  <?php 
+}
+
+if ($halt) exit;
+
+?>
+
+<?php if ($this->participant->speaksDanish()) { ?>
+<p>Velkommen <?=$this->participant->getName()?>
+<p>Placeholder text: Dansk</p>
+<p>Brug koden fra den bekræftelsesmail du fik da du tilmeldte dig Fastaval</p>
+<?php 
+$code = "Kode";
+$reg = "Registreringsnummer";
+$account = "Kontonummer";
+$alea = "Forbliv medlem af Alea (koster 75 kr.)";
+$sub = "Submit";
+} else { ?>
+<p>Welcome <?=$this->participant->getName()?>
+<p>Placeholder text: English</p>
+<p>Use the code included in the confirmation mail you got when you signed up for
+Fastaval</p>
+<?php 
+$code = "Code";
+$reg = "Registration number";
+$account = "Account number";
+$alea = "Stay a memeber of Alea (costs 75 DKK)";
+$sub = "Submit";
+} ?>
+
+<form method="post">
+  <label><?=$code?>
+    <input type="text" name="code" size="6">
+  </label>
+  <br>
+  <label><?=$reg?>
+    <input type="number" name="reg" maxlength="4" size="4" min="0" max="9999">
+  </label>
+  <br>
+  <label><?=$account?>
+    <input type="number" name="account">
+  </label>
+  <br>
+  <label><?=$alea?>
+    <input type="checkbox" name="alea">
+  </label>
+  <br>
+  <input type="submit" value="<?=$sub?>">
+</form>
