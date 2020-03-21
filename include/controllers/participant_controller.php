@@ -1910,7 +1910,7 @@ die('Not sending cancel mails');
     
             $mail = new Mail($this->config);
     
-            $mail->setFrom($this->config->get('app.email_address'), $this->config->get('app.email_alias'))
+            $mail->setFrom($this->config->get('app.email_address'), 'Fastaval')
                 ->setRecipient($participant->email)
                 ->setSubject($title)
                 ->setBodyFromPage($this->page);
