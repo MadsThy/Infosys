@@ -45,18 +45,23 @@
   }
 } 
 
+$mail = "<a href='mailto:info@fastaval.dk'>info@fastaval.dk</a>";
 if(!$this->participant || $this->participant->speaksDanish()) { 
   ?>
     <h2>Fastaval 2020 Tilbagebetaling</h2>
     <p <?=$style?>><?=$dk?></p>
-  <?php
+  <?php if($halt) {?>
+    <p>Hvis du har brug for hjælp kan du skrive til <?=$mail?></p>
+  <?php }
 }
 
 if(!$this->participant || !$this->participant->speaksDanish()) { 
   ?>
     <h2>Fastaval 2020 Refund</h2>
     <p <?=$style?>><?=$en?></p>
-  <?php 
+  <?php if($halt) {?>
+    <p>If you need help you can send a mail to <?=$mail?></p>
+  <?php }
 }
 
 if ($halt) return;
@@ -67,6 +72,7 @@ if ($halt) return;
 <p>Velkommen <?=$this->participant->getName()?>
 <p>Placeholder text: Dansk</p>
 <p>Brug koden fra den bekræftelsesmail du fik da du tilmeldte dig Fastaval</p>
+<p>Hvis du har brug for hjælp kan du skrive til <?=$mail?></p>
 <?php 
 $code = "Kode";
 $reg = "Registreringsnummer";
@@ -78,6 +84,7 @@ $sub = "Submit";
 <p>Placeholder text: English</p>
 <p>Use the code included in the confirmation mail you got when you signed up for
 Fastaval</p>
+<p>If you need help you can send a mail to <?=$mail?></p>
 <?php 
 $code = "Code";
 $reg = "Registration number";
