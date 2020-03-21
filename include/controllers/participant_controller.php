@@ -1926,7 +1926,7 @@ die('Not sending cancel mails');
     }
 
     public function processRefund(){
-        $this->page->layout_template = 'contentonly.phtml';
+        $this->page->layout_template = 'moredevices.phtml';
         if (empty($this->vars['hash']) || !$participant = $this->model->getParticipantFromRefundHash($this->vars['hash'])){
             $this->page->message = "no_hash";
             return;

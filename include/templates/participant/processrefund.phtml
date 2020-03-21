@@ -33,19 +33,29 @@
       $dk = "Ukendt fejl";
       $en = "Unknow error";
   }
+
+  if (!$halt){
+    $style = 
+      "style='
+        color:red;
+        display: inline;
+        padding: 5px;
+        border: dashed 1px red;
+      '";
+  }
 } 
 
 if(!$this->participant || $this->participant->speaksDanish()) { 
   ?>
     <h2>Fastaval 2020 Tilbagebetaling</h2>
-    <p><?=$dk?></p>
+    <p <?=$style?>><?=$dk?></p>
   <?php
 }
 
 if(!$this->participant || !$this->participant->speaksDanish()) { 
   ?>
     <h2>Fastaval 2020 Refund</h2>
-    <p><?=$en?></p>
+    <p <?=$style?>><?=$en?></p>
   <?php 
 }
 
