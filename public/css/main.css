@@ -2347,3 +2347,32 @@ form#frmExcelExport select {
 .deltager-search-box-inner input[type=checkbox] {
     margin: 0px;
 }
+
+.refund-error {
+    color: red;
+    border: 1px dashed red;
+    padding: 5px;
+    margin: 5px;
+    display:inline-block;
+}
+
+/* Chrome, Safari, Edge, Opera */
+.no-arrows::-webkit-outer-spin-button,
+.no-arrows::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+.no-arrows {
+  -moz-appearance: textfield;
+}
+
+.refund a:link { color: #0000EE; }
+.refund a:visited { color: #551A8B; }
+
+.refund {
+    width: 50em;
+    margin: auto;
+    padding: 5px;
+}
