@@ -1937,7 +1937,6 @@ die('Not sending cancel mails');
         if ($participant->refund_account !== null){
             // Already registered account
             $this->page->message = "registered";
-            $this->page->participant = $participant;
             return;
         }
 
@@ -1975,9 +1974,52 @@ die('Not sending cancel mails');
             $participant->update();
 
             $this->page->message = "success";
-            $this->page->participant = $participant;
         }
 
+    }
+
+    public function exportRefundStats(){
+        $this->page->setTemplate('');
+        $participants = $this->model->findAll();
+        header('Content-Type: text/csv;charset=utf-8');
+        header('Content-Disposition: attachment;filename="refund '.date('Y-m-d').'.csv"');
+        header('Cache-Control: max-age=0');
+        
+        echo chr(0xEF).chr(0xBB).chr(0xBF); // UTF8 BOM
+
+        //header
+        echo '"ID";"Navn";"Forudbetalt";"Alea";"Mulm";"Resultat";"Reg nr.";"Konto nr.";';
+        echo "\n";
+
+        foreach($participants as $participant) {
+            echo "\"$participant->id\";";
+            echo '"'.$participant->getName().'";';
+            echo "\"$participant->betalt_beloeb\";";
+            echo "\"$participant->refund_stay_alea\";";
+
+            // Did the participant order Mulm
+            $mulm = "nej";
+            foreach ($participant->getWear() as $wear) {
+                if ($wear->getWear()->id == 38) $mulm = "ja";
+            }
+            echo "\"$mulm\";";
+
+            // How much do we owe them
+            $resultat = $participant->betalt_beloeb;
+            if ($participant->refund_stay_alea == 'ja') {
+                $resultat -= 75;
+            }
+
+            if ($mulm == 'ja') {
+                $resultat -= 199;
+            }
+            echo "\"$resultat\";";
+
+            echo "\"$participant->refund_reg\";";
+            echo "\"$participant->refund_account\";";
+            echo "\n";
+        }
+        exit;
     }
 
     /**

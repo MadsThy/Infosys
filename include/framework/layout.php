@@ -434,6 +434,7 @@ XML;
             <li><a href='{$this->url('edit_participant_types')}'>Rediger deltagertyper</a></li>
             <li><a href='{$this->url('show_double_bookings')}'>Tjek for dobbelt-bookinger</a></li>
             <li><a href='{$this->url('show_refund')}'>Deltagere der skal have penge tilbage</a></li>
+            <li><a href='{$this->url('participant_refund_export')}'>Eksporter tilbagebetaling stats</a></li>
 HTML;
 
             if ($this->user->hasRole('Infonaut') || $this->user->hasRole('Admin')) {

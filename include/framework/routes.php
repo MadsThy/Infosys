@@ -176,8 +176,9 @@ class Routes
         $this->routes['participant_register_payment']               = array('url' => 'participant/payment/register/:hash:', 'controller' => 'Participant', 'method' => 'registerPayment');
 
         //refund
-        $this->routes['participant_refund']                         = array('url' => 'participant/refund/:hash:', 'controller' => 'Participant', 'method' => 'processRefund');
         $this->routes['send_refund_mail']                           = array('url' => 'participant/sendmail/refund', 'controller' => 'Participant', 'method' => 'sendRefundMails');
+        $this->routes['participant_refund']                         = array('url' => 'participant/refund/:hash:', 'controller' => 'Participant', 'method' => 'processRefund');
+        $this->routes['participant_refund_export']                  = array('url' => 'participant/refund/export', 'controller' => 'Participant', 'method' => 'exportRefundStats');
 
         // payment reminders
         $this->routes['7-day_payment_reminder']                     = array('url' => 'participant/payment-reminder/first', 'controller' => 'Participant', 'method' => 'sendFirstPaymentReminder');
