@@ -100,19 +100,19 @@ $sub = "Submit";
 
   <form method="post">
     <label><?=$code?>
-      <input type="text" name="code" size="6">
+      <input type="text" name="code" size="6" value="<?=$this->request->post->code?>">
     </label>
     <br>
     <label><?=$reg?>
-      <input type="number" class="no-arrows" name="reg" maxlength="4" size="4" min="0" max="9999">
+      <input id="refund_reg" type="number" class="no-arrows" name="reg" maxlength="4" size="4" value="<?=$this->request->post->reg?>">
     </label>
     <br>
     <label><?=$account?>
-      <input type="number" class="no-arrows" name="account">
+      <input id="refund_acc" type="number" class="no-arrows" name="account" maxlength="18" size="18" value="<?=$this->request->post->account?>">
     </label>
     <br>
     <label><?=$alea?>
-      <input type="checkbox" name="alea">
+      <input type="checkbox" name="alea" <?=$this->request->post->alea ? "checked" : "" ?>>
     </label>
     <br>
     <input type="submit" value="<?=$sub?>">
