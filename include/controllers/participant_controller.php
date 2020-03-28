@@ -1892,7 +1892,7 @@ die('Not sending cancel mails');
         $count = 0;
         foreach ($participants as $participant) {
             // for testing with first participant
-            if ($participant->id !== 1) {
+            if ($participant->id !== "2") {
                 continue;
             }
 
@@ -2020,7 +2020,8 @@ die('Not sending cancel mails');
             }
             echo "\"$resultat\";";
 
-            echo "\"$participant->refund_reg\";";
+            $reg = sprintf("%04d", $participant->refund_reg);
+            echo "\"$reg\";";
             echo "\"$participant->refund_account\";";
             echo "\n";
         }
