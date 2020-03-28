@@ -141,10 +141,12 @@ if ($halt) return;
       <input id="refund_acc" type="number" class="no-arrows" name="account" maxlength="18" size="18" value="<?=$this->request->post->account?>">
     </label>
     <br>
+<?php if ($this->participant->calcAlea() > 0) {?>    
     <label><?=$alea?>
       <input type="checkbox" name="alea" <?=$this->request->post->alea ? "checked" : "" ?>>
     </label>
     <br>
+<?php } ?>
     <input type="submit" value="<?=$sub?>">
   </form>
 </div>
