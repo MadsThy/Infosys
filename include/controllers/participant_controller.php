@@ -2015,7 +2015,8 @@ die('Not sending cancel mails');
             }
             echo "\"$resultat\";";
 
-            echo "\"$participant->refund_reg\";";
+            $reg = $participant->refund_reg ? sprintf("%04d", $participant->refund_reg) : "";
+            echo "\"$reg\";";
             echo "\"$participant->refund_account\";";
             echo "\n";
         }
