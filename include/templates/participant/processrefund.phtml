@@ -24,9 +24,19 @@
       $en = "Registration number cannot be empty";
       $halt = false;
       break;
+    case "tolong_reg":
+      $dk = "Registreringsnummer må ikke være længere end 4 cifre";
+      $en = "Registration number cannot be longer than 4 digits";
+      $halt = false;
+      break;
     case "empty_acc":
       $dk = "Kontonummer må ikke være tomt";
       $en = "Account number cannot be empty";
+      $halt = false;
+      break;
+    case "tolong_acc":
+      $dk = "Kontonummer må ikke være længere end 18 cifre";
+      $en = "Account number cannot be longer than 18 digits";
       $halt = false;
       break;
     default:

@@ -1953,8 +1953,18 @@ die('Not sending cancel mails');
                 return;
             }
 
+            if (strlen($post->reg) > 4) {
+                $this->page->message = "tolong_reg";
+                return;
+            }
+
             if (empty($post->account)) {
                 $this->page->message = "empty_acc";
+                return;
+            }
+
+            if (strlen($post->account) > 18) {
+                $this->page->message = "tolong_acc";
                 return;
             }
 
