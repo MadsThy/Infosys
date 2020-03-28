@@ -1891,11 +1891,6 @@ die('Not sending cancel mails');
         $participants = $this->model->factory('Participant')->findAll();
         $count = 0;
         foreach ($participants as $participant) {
-            // for testing with first participant
-            if ($participant->id !== 1) {
-                continue;
-            }
-
             if ($participant->refund_hash !== null){
                 //Already have a hash meaning mail has already been sent
                 continue;
