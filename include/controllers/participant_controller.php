@@ -1937,6 +1937,7 @@ die('Not sending cancel mails');
         if ($participant->refund_account !== null){
             // Already registered account
             $this->page->message = "registered";
+            $this->page->participant = $participant;
             return;
         }
 
@@ -1974,6 +1975,7 @@ die('Not sending cancel mails');
             $participant->update();
 
             $this->page->message = "success";
+            $this->page->participant = $participant;
         }
 
     }
