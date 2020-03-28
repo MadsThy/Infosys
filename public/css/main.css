@@ -2372,7 +2372,19 @@ form#frmExcelExport select {
 .refund a:visited { color: #551A8B; }
 
 .refund {
-    width: 50em;
+    width: 40em;
     margin: auto;
-    padding: 5px;
+    padding-top: 1px; /*prevent margin collapse*/
+}
+
+.refund input {
+    margin: 4px;
+}
+
+#refund_reg{
+    width: 3em;
+}
+
+#refund_acc{
+    width: 11em;
 }
