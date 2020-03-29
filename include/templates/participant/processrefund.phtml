@@ -96,7 +96,7 @@ if ($this->message == "success" || $this->message == "registered") { ?>
   <table>
     <tr>
       <td><?=$reg?></td>
-      <td>: <?=$this->participant->refund_reg?></td>
+      <td>: <?=sprintf("%04d", $this->participant->refund_reg)?></td>
     </tr>
     <tr>
       <td><?=$account?></td>
