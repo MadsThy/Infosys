@@ -50,6 +50,12 @@ $this->registerLateLoadJS('participant.js');
                 </tr>
             </table>
         </fieldset>
+        <p>
+            <br>
+            Link til tilbagebetalingsformular:<br>
+            <?php $refund_url = $this->url('participant_refund', array('hash' => $this->deltager->refund_hash))?>
+            <a href ="<?=$refund_url?>"><?=$refund_url?></a>
+        </p>
     </div>
     <div id='refund_numbers'>
         <fieldset>
