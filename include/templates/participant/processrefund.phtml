@@ -74,21 +74,29 @@ if(!$this->participant || !$this->participant->speaksDanish()) {
 if ($this->participant && $this->participant->speaksDanish()) {
   $saved = "Dette er hvad vi har gemt:";
   $code = "Kode";
-  $reg = "Registreringsnummer";
-  $account = "Kontonummer";
+  $reg = "Bank registreringsnummer";
+  $account = "Bankkontonummer";
   $alea = "Forbliv medlem af Alea (koster 75 kr.)";
   $sub = "Submit";
   $yes = "Ja";
   $no = "Nej";
+  $bankheader = <<<HTML
+  <h3>Bankoplysninger</h3>
+  <p><b>NB: Det er kontonummer og IKKE kortnummer</b></p>
+HTML;
 } else {
   $saved = "This is the information we have saved:";
   $code = "Code";
-  $reg = "Registration number";
-  $account = "Account number";
+  $reg = "Bank registration number";
+  $account = "Bank account number";
   $alea = "Stay a memeber of Alea (costs 75 DKK)";
   $sub = "Submit";
   $yes = "Yes";
   $no = "No";
+  $bankheader = <<<HTML
+  <h3>Bank information</h3>
+  <p><b>Attention: We need you bank account number and not you card number</b></p>
+HTML;
 }
 
 if ($this->message == "success" || $this->message == "registered") { ?>
@@ -132,7 +140,7 @@ if ($halt) return;
     <label><?=$code?>
       <input type="text" name="code" size="6" value="<?=$this->request->post->code?>">
     </label>
-    <br>
+    <?=$bankheader?>
     <label><?=$reg?>
       <input id="refund_reg" type="number" class="no-arrows" name="reg" maxlength="4" size="4" value="<?=$this->request->post->reg?>">
     </label>
