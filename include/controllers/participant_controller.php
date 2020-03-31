@@ -1988,7 +1988,7 @@ die('Not sending cancel mails');
         echo chr(0xEF).chr(0xBB).chr(0xBF); // UTF8 BOM
 
         //header
-        echo '"ID";"Navn";"Forudbetalt";"Alea";"Mulm";"Resultat";"Reg nr.";"Konto nr.";';
+        echo '"ID";"Navn";"Forudbetalt";"Alea";"Mulm";"Resultat";"Reg nr.";"Konto nr.";"Udført";';
         echo "\n";
 
         foreach($participants as $participant) {
@@ -2018,6 +2018,7 @@ die('Not sending cancel mails');
             $reg = $participant->refund_reg ? sprintf("%04d", $participant->refund_reg) : "";
             echo "\"$reg\";";
             echo "\"$participant->refund_account\";";
+            echo "\"$participant->refund_completed\";";
             echo "\n";
         }
         exit;
