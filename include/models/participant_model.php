@@ -3079,4 +3079,9 @@ WHERE (
         return $participant->findBySelect($select);
     }
 
+    public function refundReminderList(){
+        $select = $this->createEntity('Deltagere')->getSelect();
+        $select->setWhere('refund_completed', '!=', 'ja');
+        return $this->createEntity('Deltagere')->findBySelectMany($select);
+    }
 }

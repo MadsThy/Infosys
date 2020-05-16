@@ -1887,7 +1887,7 @@ die('Not sending cancel mails');
     }
 
     public function sendRefundMails(){
-//die('Not sending refund mails');
+die('Not sending refund mails');
         $participants = $this->model->factory('Participant')->findAll();
         $count = 0;
         foreach ($participants as $participant) {
@@ -1921,6 +1921,37 @@ die('Not sending cancel mails');
             $count++;
         }
         $this->log('Refund mail sent to ' . $count . ' participants', 'Refund', null);
+
+        exit;
+    }
+
+    public function sendRefundReminder(){
+die('Not sending refund reminder');
+        echo "Sending refund reminders";
+        $participants = $this->model->refundReminderList();
+        $count = 0;
+        foreach ($participants as $participant) {
+            $danish = $participant->speaksDanish();
+            $title = $danish ?
+                "HUSK, Fastaval skal have dine oplysning om tilbagebetaling inden 1. juni":
+                "N.B., Fastaval needs your bank information to refund your participant fee before June 1st";
+            
+            $this->page->danish = $danish;
+            $this->page->setTemplate('participant/sendrefundreminder');
+    
+            $mail = new Mail($this->config);
+    
+            $mail->setFrom($this->config->get('app.email_address'), 'Fastaval')
+                ->setRecipient($participant->email)
+                ->setSubject($title)
+                ->setBodyFromPage($this->page);
+    
+            $mail->send();
+
+            $this->log('System sent refund reminder to participant (ID: ' . $participant->id . ')', 'Refund', null);
+            $count++;
+        }
+        $this->log('Refund reminder sent to ' . $count . ' participants', 'Refund', null);
 
         exit;
     }
