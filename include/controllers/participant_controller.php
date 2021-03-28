@@ -1832,10 +1832,8 @@ exit;
 die(__FUNCTION__.' is currently disabled');
         $participants = $this->model->factory('Participant')->findAll();
         $count = 0;
-        // For limiting recipients
-        $recipients = ["Mikkel Westh"];
         foreach ($participants as $participant) {
-            if (!in_array($participant->getName(), $recipients)) continue;
+            if(empty($participant->email)) continue;
             $this->sendWelcome($participant);
             $this->log('System sent welcome mail to participant (ID: ' . $participant->id . ')', 'Mail', null);
             $count++;
@@ -1848,8 +1846,8 @@ die(__FUNCTION__.' is currently disabled');
     private function sendWelcome($participant){
         $danish = $participant->speaksDanish();
         $title = $danish ?
-            "[Test med aktiviteter] Velkommen til Fastaval ".date('Y'):
-            "[Test with activities] Welcome to Fastaval ".date('Y');
+            "Velkommen til Fastaval ".date('Y'):
+            "Welcome to Fastaval ".date('Y');
         
         $this->page->danish = $danish;
         $this->page->participant = $participant;
