@@ -1828,6 +1828,43 @@ exit;
         exit;
     }
 
+    public function welcomeMail(){
+die(__FUNCTION__.' is currently disabled');
+        $participants = $this->model->factory('Participant')->findAll();
+        $count = 0;
+        // For limiting recipients
+        $recipients = ["Mikkel Westh"];
+        foreach ($participants as $participant) {
+            if (!in_array($participant->getName(), $recipients)) continue;
+            $this->sendWelcome($participant);
+            $this->log('System sent welcome mail to participant (ID: ' . $participant->id . ')', 'Mail', null);
+            $count++;
+        }
+        $this->log('Welcome mail sent to ' . $count . ' participants', 'Mail', null);
+
+        die("Welcome mail has been sent to $count users");
+    }
+
+    private function sendWelcome($participant){
+        $danish = $participant->speaksDanish();
+        $title = $danish ?
+            "[Test med aktiviteter] Velkommen til Fastaval ".date('Y'):
+            "[Test with activities] Welcome to Fastaval ".date('Y');
+        
+        $this->page->danish = $danish;
+        $this->page->participant = $participant;
+        $this->page->setTemplate('participant/sendwelcomemail');
+
+        $mail = new Mail($this->config);
+
+        $mail->setFrom($this->config->get('app.email_address'), $this->config->get('app.email_alias'))
+            ->setRecipient($participant->email)
+            ->setSubject($title)
+            ->setBodyFromPage($this->page);
+
+        return $mail->send();
+    }
+
     /**
      * updates the participants sleeping arrangement for fastaval
      *

@@ -181,6 +181,9 @@ class Routes
         $this->routes['last_payment_reminder']                      = array('url' => 'participant/payment-reminder/last', 'controller' => 'Participant', 'method' => 'sendLastPaymentReminder');
         $this->routes['payment_reminder_annulled']                  = array('url' => 'participant/payment-reminder/annulled', 'controller' => 'Participant', 'method' => 'cancelParticipantSignup');
 
+        // misc participant mails
+        $this->routes['send_participant_mail']                      = array('url' => 'participant/sendmail/welcome', 'controller' => 'Participant', 'method' => 'welcomeMail');
+
         // bank transfer
         $this->routes['participant_register_bank_payment']          = array('url' => 'participant/register-bank-transfer/:id:', 'controller' => 'Participant', 'method' => 'registerBankTransfer');
 

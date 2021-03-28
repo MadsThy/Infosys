@@ -1,0 +1,141 @@
+<?php if ($this->danish) { ?>
+<p>Kære <?=$this->participant->getName()?>,</p>
+
+<p>Nu nærmer online Fastaval sig med hastige skridt! Som lovet kommer der her
+lidt mere information om, hvordan det hele fungerer.
+Længere nede i mailen vil du kunne se dine tildelte aktiviteter.</p>
+
+<p><h2>Hvordan fungerer digital Fastaval?</h2>
+Fastavals primære platform i år er Discord. Hvordan du tilgår discordserveren,
+hvor du spiller du dine scenarier/brætspil, andre aktiviteter og andet praktisk
+information om det digitale Fastaval står i denne guide, som vi råder alle folk
+til at læse inden Fastaval starter:
+<a href="https://bit.ly/3dcTYYy">https://bit.ly/3dcTYYy</a></p>
+
+<p>Hvis du ikke nåede at tilmelde dig Ottofesten, kan det nås endnu. Skriv blot
+en mail til <a href="mailto:info@fastaval.dk">info@fastaval.dk</a>. Mere
+information om Ottofesten kommer, når vi nærmer os søndag.</p>
+
+
+<p><h2>Fastaval merchandise:</h2>
+Du kan stadig nå at købe dit Fastaval merch. Web-shoppen lukker ned mandag aften
+ d. 5. April.
+Find udvalget af Fasta-wear i linket herunder:
+<a href="https://shop.spreadshirt.dk/fastaval2021?fbclid=IwAR2s8FBLhLTv8FCxKSKh-Iihse2djGxDnaoZftBcQ0BhAhHlCnZcrO4_0GU">
+https://shop.spreadshirt.dk/fastaval2021?fbclid=IwAR2s8FBLhLTv8FCxKSKh-Iihse2djGxDnaoZftBcQ0BhAhHlCnZcrO4_0GU</a></p>
+
+
+<p><h2>Hjælp til online Fastaval:</h2>
+Vagthavende General er tilgængelig fra kl. 10-02 og kan kontaktes på
+<a href="mailto:bunker@fastaval.dk">bunker@fastaval.dk</a>.</p>
+
+<p>Hvis du har spørgsmål ang. din tilmelding eller andet, så kontakt
+Informationen på <a href="mailto:info@fastaval.dk">info@fastaval.dk</a>
+Du kan også skrive til Fastavals søde og hjælpsomme Infonauter på kanalen
+"Frontinfo" på vores Discordserver.</p>
+
+
+<p><strong>Vi glæder os til at se dig på dette års online Fastaval!</strong></p>
+
+<p><strong>Venlig Hilsen Fastaval</strong></p>
+
+<?php } else { ?>
+<p>Dear <?=$this->participant->getName()?>,</p>
+
+<p>Fastaval Online is coming up soon! As we promised, here are some further
+details on how everything works. 
+Enclosed in this mail you will find your scheduled activities.</p>
+
+<p><h2>How does the digital Fastaval work?</h2>
+The main platform for Fastaval this year will be Discord. Instructions on how to
+access the Discord server, where to play your scenarios or board games, other
+activities, and further practical information, are all found in this guide,
+which we advise everyone to read before Fastaval begins:
+<a href="https://bit.ly/3dcTYYy">https://bit.ly/3dcTYYy</a></p>
+
+<p>If you haven’t signed up for the Otto party, you still have time. Write us a
+mail at <a href="mailto:info@fastaval.dk">info@fastaval.dk</a>. More info on the party will be sent out as we get
+closer to Sunday.</p>
+
+<p>All times are in GMT+1, which you should be aware of, are you playing in
+another time zone.</p>
+
+<p><h2>Fastaval merchandise:</h2>
+You still have time to get your hands on some Fastaval merch. The web shop will
+close on Monday evening, April 5th.
+Browse the selection of Fasta-wear through this link:
+<a href="https://shop.spreadshirt.dk/fastaval2021?fbclid=IwAR2s8FBLhLTv8FCxKSKh-Iihse2djGxDnaoZftBcQ0BhAhHlCnZcrO4_0GU">
+https://shop.spreadshirt.dk/fastaval2021?fbclid=IwAR2s8FBLhLTv8FCxKSKh-Iihse2djGxDnaoZftBcQ0BhAhHlCnZcrO4_0GU</a></p>
+
+<p>Help during the event:
+The General on duty is available from 10 AM-2 AM, and can be reached at
+<a href="mailto:bunker@fastaval.dk">bunker@fastaval.dk</a>.</p>
+
+<p>If you have questions regarding your signup or anything else, please contact
+the Info at <a href="mailto:info@fastaval.dk">info@fastaval.dk</a>
+You can also write the kind and helpful Fastaval Infonauts on the “Frontinfo”
+channel on our Discord server.</p>
+
+<p><strong>We’re looking very much forward to seeing you at this year’s online Fastaval!</strong></p>
+
+<p><strong>Love, Fastaval</strong></p>
+
+<?php }
+  $pladser = $this->participant->getPladser();
+  if ($pladser) :
+?>
+<table class='subtable fullwidth activities' cellspacing="0" cellpadding="0" border="0">
+  <caption><?=$this->danish ? 'Aktiviteter:' : 'Activities'?></caption>
+<?php 
+    $whole_con_string = $this->danish ? "Hele Con&#39;en" : "Entire convention" ;
+    $gamemaster_string = $this->danish ? "Spilleder" : "Gamemaster";
+    $dates = array();
+    $index = 0;
+    foreach ($pladser as $plads) :
+      $schedule = $plads->getAfvikling();
+      $activity = $schedule->getAktivitet();
+
+      if ($activity->hidden === 'ja') {
+          continue;
+      }
+
+      $date      = strtotime(date('Y-m-d', strtotime($schedule->start) - 18000));
+      $long_play = false;
+
+      if (strtotime($schedule->slut) - strtotime($schedule->start) > 86400) {
+          $date      = $index++;
+          $long_play = true;
+      }
+
+      $activity_name = $this->danish ? e($activity->navn) : e($activity->title_en);
+      $gamemaster_display_string = $plads->type == 'spilleder' ? $gamemaster_string : '';
+
+      $start_string = $long_play ? '' : date('D H:i', strtotime($schedule->start));
+      $start_string = $this->danish ? danishDayNames($start_string) : $start_string;
+      
+      $end_string = $long_play ? '' : date('D H:i', strtotime($schedule->slut));
+      $end_string = $this->danish ? danishDayNames($end_string) : $end_string;
+
+      $row_string = "\t\t<tr>\n";
+      $row_string .= "\t\t\t<td>$activity_name</td>\n";
+      $row_string .= "\t\t\t<td style='padding: 0 1em;'> $start_string - $end_string </td>\n";
+      $row_string .= "\t\t\t<td>$gamemaster_display_string</td>\n";
+      $row_string .= "\t\t</tr>";
+
+      $dates[$date][] = $row_string;
+    endforeach;
+
+    foreach ($dates as $date => $stuff) :
+      $date = intval($date) < 100 ? $whole_con_string : date('l', $date);
+      $date = $this->danish ? danishDayNames($date) : $date;
+?>
+    <tr><td colspan="4"><strong><?=$date?></strong></td></tr>
+<?php 
+      foreach ($stuff as $row) :
+          echo $row;
+      endforeach;
+      ?><tr><td colspan="4"> </td></tr><?php
+    endforeach;
+?>
+</table>
+<?php endif;?>
