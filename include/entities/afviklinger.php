@@ -614,23 +614,36 @@ WHERE
      */
     public function createVotes(Page $page)
     {
-        require_once LIB_FOLDER . 'phpqrcode/phpqrcode.php';
-
         mt_srand(time() . $this->id);
 
-        $query = '
-DELETE FROM
-    schedules_votes
-WHERE
-    schedule_id = ?
-';
+        $this->deleteVotes();
+        $this->createNewVoteCodes();
 
-        $this->db->exec($query, [$this->id]);
+        return $this->createVoteQRImages($page);
+    }
 
+    /**
+     * creates votes for the schedule, without
+     * creating QR codes for them
+     *
+     * @access public
+     * @return array
+     */
+    public function createVotesWithoutImages()
+    {
+        mt_srand(time() . $this->id);
+
+        $this->deleteVotes();
+        $this->createNewVoteCodes();
+
+        return $this->fetchVoteCodeData();
+    }
+
+    private function createNewVoteCodes()
+    {
         $query     = 'INSERT INTO schedules_votes (schedule_id, code, cast_at) VALUES ';
         $values    = [];
         $arguments = [];
-        $votes     = [];
 
         $activity = $this->getActivity();
         $teams    = $this->getHold();
@@ -646,19 +659,46 @@ WHERE
 
         if ($values) {
             $this->db->exec($query . implode(', ', $values), $arguments);
+        }
+    }
 
-            $query = 'SELECT id, code FROM schedules_votes WHERE schedule_id = ?';
+    private function deleteVotes()
+    {
+        $query = '
+DELETE FROM
+    schedules_votes
+WHERE
+    schedule_id = ?
+';
 
-            foreach ($this->db->query($query, [$this->id]) as $row) {
-                $votes[] = [
-                            'id'   => $row['id'],
-                            'code' => $row['code'],
-                           ];
+        $this->db->exec($query, [$this->id]);
+    }
 
-                QRcode::png($page->url('activity_specific_vote', ['code' => $row['code']]), PUBLIC_PATH . 'vote-barcodes/' . $row['id'] . '.png', 'M', 3);
+    private function createVoteQRImages(Page $page)
+    {
+        require_once LIB_FOLDER . 'phpqrcode/phpqrcode.php';
 
-            }
+        $votes = $this->fetchVoteCodeData();
 
+        foreach ($votes as $row) {
+            QRcode::png($page->url('activity_specific_vote', ['code' => $row['code']]), PUBLIC_PATH . 'vote-barcodes/' . $row['id'] . '.png', 'M', 3);
+
+        }
+
+        return $votes;
+    }
+
+    private function fetchVoteCodeData()
+    {
+        $votes = [];
+
+        $query = 'SELECT id, code FROM schedules_votes WHERE schedule_id = ?';
+
+        foreach ($this->db->query($query, [$this->id]) as $row) {
+            $votes[] = [
+                        'id'   => $row['id'],
+                        'code' => $row['code'],
+                       ];
         }
 
         return $votes;

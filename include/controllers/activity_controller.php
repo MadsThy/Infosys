@@ -38,7 +38,7 @@ class ActivityController extends Controller
 {
 
     protected $prerun_hooks = array(
-        array('method' => 'checkUser', 'exclusive' => true, 'methodlist' => array('gamestartQueue', 'gamestartQueueAjax', 'specifyVote', 'specifyVotePosted', 'confirmVote', 'castVote', 'votingDone')),
+        array('method' => 'checkUser', 'exclusive' => true, 'methodlist' => array('gamestartQueue', 'gamestartQueueAjax', 'specifyVote', 'specifyVotePosted', 'confirmVote', 'castVote', 'votingDone', 'prepareAndSendScheduleVotes')),
     );
 
     /**
@@ -710,6 +710,90 @@ class ActivityController extends Controller
         $this->page->time = $time;
 
         $this->page->layout_template = 'printlist.phtml';
+    }
+
+    /**
+     * displays a page with vote markers for
+     *
+     * @access public
+     * @return void
+     */
+    public function prepareAndSendScheduleVotes()
+    {
+        // find schedules that started one hour ago,
+        // modulo a quarter
+        $now = new \DateTime();
+        $quarter = floor((float) $now->format('i') / 15) * 15;
+        $then = $now->sub(new \DateInterval('PT1H'));
+        $time = sprintf('%s:%02u:00', $then->format('Y-m-d H'), $quarter);
+
+        //$time = '2021-03-31 12:00:00';
+        if (!($gamestart_details = $this->model->getGameStartDetails($time))) {
+            exit;
+        }
+
+        if ($this->model->votesCast($gamestart_details)) {
+            exit;
+        }
+
+        foreach ($gamestart_details as $detail) {
+            $votes = $detail['run']->createVotesWithoutImages();
+            $teams = $detail['run']->getHold();
+            $votes_per_team = count($votes) / count($teams);
+            $activity = $detail['run']->getActivity();
+            $this->page->title = $activity->title_en;
+
+            if ('rolle' !== $activity->type) {
+                continue;
+            }
+
+            foreach ($teams as $team) {
+                $gms = $team->getGMs();
+
+                $team_votes = array_slice($votes, 0, $votes_per_team);
+                $votes = array_slice($votes, $votes_per_team);
+
+                if (0 < count($gms)) {
+
+                    $this->page->team_votes = $team_votes;
+                    $this->page->setTemplate('activity/gmvoteemail');
+
+                    $mail = new Mail($this->config);
+
+                    $title = sprintf('Fastaval: votes for %s', $activity->title_en);
+
+                    $mail->setFrom($this->config->get('app.email_address'), $this->config->get('app.email_alias'))
+                        ->setRecipient($gms[0]->getParticipant()->email)
+                        ->setSubject($title)
+                        ->setBodyFromPage($this->page);
+
+                    $mail->send();
+		    $this->log(sprintf('Sent GM voting email with %u votes to %s', count($team_votes), $gms[0]->getParticipant()->email), 'email', 0);
+
+                } else {
+                    $this->page->setTemplate('activity/gamervoteemail');
+
+                    foreach ($team->getGamers() as $gamer) {
+                        $this->page->vote = reset($team_votes);
+                        $team_votes = array_slice($team_votes, 1);
+                        $mail = new Mail($this->config);
+
+                        $title = sprintf('Fastaval: vote for %s', $activity->title_en);
+
+                        $mail->setFrom($this->config->get('app.email_address'), $this->config->get('app.email_alias'))
+                            ->setRecipient($gamer->getParticipant()->email)
+                            ->setSubject($title)
+                            ->setBodyFromPage($this->page);
+
+                        $mail->send();
+		        $this->log(sprintf('Sent Gamer voting email to %s', $gamer->getParticipant()->email), 'email', 0);
+                    }
+                }
+            }
+
+        }
+
+        exit;
     }
 
     /**

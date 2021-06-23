@@ -225,6 +225,7 @@ class Routes
 
         $this->routes['priority_signup_statistics'] = ['url' => 'activities/priority-signups', 'controller' => 'Activity', 'method' => 'showPrioritySignupStatistics'];
 
+        $this->routes['prepare_and_send_votes']    = array('url' => 'aktiviteter/schedule-votes/prepare-send', 'controller' => 'Activity', 'method' => 'prepareAndSendScheduleVotes');
         $this->routes['prepare_schedule_votes']    = array('url' => 'aktiviteter/schedule-votes/prepare/:time:', 'controller' => 'Activity', 'method' => 'prepareScheduleVotes');
         $this->routes['show_vote_stats']           = array('url' => 'aktiviteter/voting/stats', 'controller' => 'Activity', 'method' => 'showVotingStats');
 
