@@ -68,6 +68,7 @@ class Deltagere extends DBObject implements AgeFulfilment
         'forfatter'                     => 'Forfatter',
         'fornavn'                       => 'Fornavn',
         'hemmelig_onkel'                => 'Hemmelig onkel',
+        'financial_struggle'            => 'Økonomisk trængende',
         'international'                 => 'International',
         'interpreter'                   => 'Simultantolk',
         'land'                          => 'Land',

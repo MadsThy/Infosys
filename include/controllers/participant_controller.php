@@ -397,6 +397,7 @@ class ParticipantController extends Controller
                                                 'forfatter' => '',
                                                 'rig_onkel' => '',
                                                 'hemmelig_onkel' => '',
+                                                'financial_struggle' => '',
                                                 'tilmeld_scenarieskrivning' => '',
                                                 'krigslive_bus' => '',
                                                 'ungdomsskole' => '',

@@ -1153,6 +1153,7 @@ INSERT INTO participantpaymenthashes SET participant_id = ?, hash = ? ON DUPLICA
             'rig_onkel',
             'arbejdsomraade',
             'hemmelig_onkel',
+            'financial_struggle',
             'ready_mandag',
             'ready_tirsdag',
             'oprydning_tirsdag',

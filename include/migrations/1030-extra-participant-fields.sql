@@ -1,0 +1,1 @@
+ALTER TABLE deltagere ADD financial_struggle enum('ja','nej');

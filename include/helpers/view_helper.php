@@ -164,7 +164,7 @@ HTML;
                     <tr>
                         <td><b>Rig onkel:</b> {$this->view->genSelect('deltager_search[rig_onkel]', array('', 'nej', 'ja'))}</td>
                         <td><b>Hemmelig onkel:</b> {$this->view->genSelect('deltager_search[hemmelig_onkel]', array('', 'nej', 'ja'))}</td>
-                        <td><b>Checkin-time:</b>  <input type='text' value='' name='deltager_search[checkin_time]' /></td>
+                        <td><b>Økonomisk trængende:</b> {$this->view->genSelect('deltager_search[financial_struggle]', array('', 'nej', 'ja'))}</td>
                     </tr>
                     <tr>
                         <td><strong>Simultantolk:</strong> {$this->view->genSelect('deltager_search[interpreter]', array('', 'nej','ja'))}</td>
@@ -177,6 +177,7 @@ HTML;
                         <td><b>Scenarie:</b> <input class='tripleinput' type='text' value='' name='deltager_search[scenarie]' /></td>
                     </tr>
                     <tr>
+                        <td><b>Checkin-time:</b>  <input type='text' value='' name='deltager_search[checkin_time]' /></td>
                         <td><b>Skills:</b> <input class='tripleinput' type='text' value='' name='deltager_search[skills]' /></td>
                         <td><b>Noter:</b> <input class='tripleinput' type='text' value='' name='deltager_search[deltager_note]' /></td>
                     </tr>
