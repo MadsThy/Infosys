@@ -367,7 +367,6 @@ class ParticipantController extends Controller
     {
         return array('deltager_search' => array(
                                                 'id' => '',
-                                                'gender' => '', 
                                                 'alder' => '',
                                                 'brugerkategori_id' => '',
                                                 'betalt_beloeb' => '',
