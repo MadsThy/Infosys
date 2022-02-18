@@ -1131,6 +1131,7 @@ INSERT INTO participantpaymenthashes SET participant_id = ?, hash = ? ON DUPLICA
         $fields = array(
             'fornavn',
             'efternavn',
+            'nickname',
             'birthdate',
             'alder',
             'email',

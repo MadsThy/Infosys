@@ -34,11 +34,12 @@ $this->registerLateLoadJS('participant.js');
             <table>
                 <tr>
                     <td class='label'>ID: </td><td><?= $this->deltager->id;?></td>
-                    <td colspan='4'>&nbsp;</td>
+                    <td colspan='1'>&nbsp;</td>
+                    <td class='label'>Fødselsdato: </td><td id='birthdate' class='editable text'><?= e(date('d-m-Y', strtotime($this->deltager->birthdate)));?></td>
                 </tr>
                 <tr>
-                    <td class='label'>Fødselsdato: </td><td id='birthdate' class='editable text'><?= e(date('d-m-Y', strtotime($this->deltager->birthdate)));?></td>
-                    <td class='label'>Navn: </td><td colspan='3' id='name' class='editable text'><?= e($this->deltager->fornavn);?> <?= e($this->deltager->efternavn);?></td>
+                    <td class='label'>Navn: </td><td colspan='2' id='name' class='editable text'><?= e($this->deltager->fornavn);?> <?= e($this->deltager->efternavn);?></td>
+                    <td class='label'>Kaldenavn: </td><td colspan='2' id='nickname' class='editable text'><?= e($this->deltager->nickname);?></td>
                 </tr>
                 <tr>
                     <td class='label'>Kategori: </td><td class='editable usertype' id='brugerkategori_id'><?= $this->deltager_info['brugerkategori']->navn;?></td>
